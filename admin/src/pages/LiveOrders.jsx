@@ -1,3 +1,5 @@
+import { socket } from '../config/socket';
+import API_URL from '../config/api';
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
@@ -18,7 +20,6 @@ import {
   TrendingUp,
   Activity
 } from 'lucide-react';
-import { io } from 'socket.io-client';
 
 const LiveOrders = () => {
   const [orders, setOrders] = useState([]);
@@ -29,7 +30,7 @@ const LiveOrders = () => {
   useEffect(() => {
     fetchOrders();
 
-    const socket = io(import.meta.env.VITE_API_URL + '');
+    
     socket.on('new_order', (newOrder) => {
       setOrders(prev => [newOrder, ...prev]);
       playNotificationSound();
@@ -39,12 +40,12 @@ const LiveOrders = () => {
       setOrders(prev => prev.map(o => o._id === updatedOrder._id ? updatedOrder : o));
     });
 
-    return () => socket.disconnect();
+    // using shared socket
   }, []);
 
   const fetchOrders = async () => {
     try {
-      const res = await fetch(import.meta.env.VITE_API_URL + '/api/orders');
+      const res = await fetch(API_URL + '/api/orders');
       const data = await res.json();
       setOrders(data);
     } catch (err) {
@@ -61,7 +62,7 @@ const LiveOrders = () => {
 
   const updateOrderStatus = async (id, status) => {
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/orders/${id}/status`, {
+      const res = await fetch(`${API_URL}/api/orders/${id}/status`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status })
@@ -74,7 +75,7 @@ const LiveOrders = () => {
 
   const updatePaymentStatus = async (id, paymentStatus) => {
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/orders/${id}/payment`, {
+      const res = await fetch(`${API_URL}/api/orders/${id}/payment`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ paymentStatus })

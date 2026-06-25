@@ -1,3 +1,5 @@
+import { socket } from '../config/socket';
+import API_URL from '../config/api';
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
@@ -10,7 +12,6 @@ import {
 } from 'recharts';
 import RollingNumber from '../components/RollingNumber';
 import axios from 'axios';
-import { io } from 'socket.io-client';
 
 const DashboardOverview = () => {
   const [timeRange, setTimeRange] = useState('today');
@@ -36,9 +37,9 @@ const DashboardOverview = () => {
     setIsRefreshing(true);
     try {
       const [metricsRes, chartsRes, feedRes] = await Promise.all([
-        axios.get(`${import.meta.env.VITE_API_URL}/api/analytics/metrics?timeRange=${timeRange}`),
-        axios.get(`${import.meta.env.VITE_API_URL}/api/analytics/charts?timeRange=${timeRange}`),
-        axios.get(`${import.meta.env.VITE_API_URL}/api/analytics/live-feed`)
+        axios.get(`${API_URL}/api/analytics/metrics?timeRange=${timeRange}`),
+        axios.get(`${API_URL}/api/analytics/charts?timeRange=${timeRange}`),
+        axios.get(`${API_URL}/api/analytics/live-feed`)
       ]);
       
       setMetrics(metricsRes.data);
@@ -61,7 +62,7 @@ const DashboardOverview = () => {
   }, [timeRange]);
 
   useEffect(() => {
-    const socket = io(import.meta.env.VITE_API_URL + '');
+    
     
     socket.on('active_users_update', (count) => setActiveUsers(count));
     socket.on('analytics_update', (data) => {
@@ -74,7 +75,7 @@ const DashboardOverview = () => {
     socket.on('order_status_update', () => { if(timeRange === 'today') fetchDashboardData() });
     socket.on('reservation_update', () => { if(timeRange === 'today') fetchDashboardData() });
 
-    return () => socket.disconnect();
+    // using shared socket
   }, [timeRange]);
 
   const statCards = [

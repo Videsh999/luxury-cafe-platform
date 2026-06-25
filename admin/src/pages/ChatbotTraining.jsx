@@ -1,8 +1,9 @@
+import API_URL from '../config/api';
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Save, Plus, Trash2, Send, Brain, MessageSquare, Sparkles, RefreshCw } from 'lucide-react';
 
-const API = import.meta.env.VITE_API_URL + '/api/chat';
+const API = API_URL + '/api/chat';
 
 const Section = ({ title, children }) => (
   <div className="bg-white/[0.03] border border-white/10 rounded-2xl p-6 space-y-4">

@@ -1,3 +1,4 @@
+import API_URL from '../config/api';
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, Search, Edit2, Trash2, CheckCircle, AlertCircle, X, Image as ImageIcon } from 'lucide-react';
@@ -46,7 +47,7 @@ const MenuManager = () => {
 
   const fetchMenu = async () => {
     try {
-      const res = await fetch(import.meta.env.VITE_API_URL + '/api/menu');
+      const res = await fetch(API_URL + '/api/menu');
       const data = await res.json();
       setItems(data);
       setLoading(false);
@@ -64,7 +65,7 @@ const MenuManager = () => {
 
   const handleToggleAvailability = async (id, currentStatus) => {
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/menu/${id}/availability`, {
+      const res = await fetch(`${API_URL}/api/menu/${id}/availability`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ isAvailable: !currentStatus })
@@ -81,7 +82,7 @@ const MenuManager = () => {
   const handleDelete = async () => {
     if (!editingItem) return;
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/menu/${editingItem._id}`, { method: 'DELETE' });
+      const res = await fetch(`${API_URL}/api/menu/${editingItem._id}`, { method: 'DELETE' });
       if (res.ok) {
         setItems(items.filter(item => item._id !== editingItem._id));
         showToast("Item deleted successfully");
@@ -96,7 +97,7 @@ const MenuManager = () => {
   const handleSave = async (e) => {
     e.preventDefault();
     try {
-      const url = editingItem ? `${import.meta.env.VITE_API_URL}/api/menu/${editingItem._id}` : import.meta.env.VITE_API_URL + '/api/menu';
+      const url = editingItem ? `${API_URL}/api/menu/${editingItem._id}` : API_URL + '/api/menu';
       const method = editingItem ? 'PUT' : 'POST';
       
       const res = await fetch(url, {
