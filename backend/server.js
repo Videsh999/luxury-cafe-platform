@@ -9,7 +9,7 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 // ── Load env FIRST before anything else ──────────────────────────────────────
 dotenv.config();
 
-const PORT         = process.env.PORT        || 5001;
+const PORT         = process.env.PORT        || 10000;
 const MONGODB_URI  = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/luxury-cafe';
 const GEMINI_KEY   = process.env.GEMINI_API_KEY;
 const JWT_SECRET   = process.env.JWT_SECRET  || 'aura_luxury_secret_123';
@@ -70,21 +70,6 @@ app.use('/api/payments',     paymentRoutes);
 app.use('/api/tables',       tableRoutes);
 app.use('/api/analytics',    analyticsRoutes);
 
-
-import path from "path";
-import { fileURLToPath } from "url";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-app.use(express.static(path.join(__dirname,"../frontend/dist")));
-
-// frontend only
-app.get(/^\/(?!api).*/, (req,res)=>{
- res.sendFile(
-   path.join(__dirname,"../frontend/dist/index.html")
- );
-});
 
 // 404 catch-all
 app.use((req,res)=>{
@@ -231,7 +216,7 @@ mongoose.connection.on('error', (err) => {
 
 // ── Start server then connect DB ──────────────────────────────────────────────
 // Important: start HTTP server first so health checks work even while DB is connecting
-httpServer.listen(PORT, async () => {
+httpServer.listen(PORT, "0.0.0.0", async () => {
   console.log('\n╔══════════════════════════════════════════╗');
   console.log('║  🚀  Aura Reserve Backend Started         ║');
   console.log(`║  Port: ${String(PORT).padEnd(34)}║`);
@@ -243,11 +228,3 @@ httpServer.listen(PORT, async () => {
 });
 
 
-
-app.use(express.static(path.join(__dirname,"../frontend/dist")));
-
-app.get("*",(req,res)=>{
-  res.sendFile(
-    path.join(__dirname,"../frontend/dist/index.html")
-  );
-});
