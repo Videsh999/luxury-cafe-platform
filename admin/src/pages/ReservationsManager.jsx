@@ -32,7 +32,7 @@ const ReservationsManager = () => {
   useEffect(() => {
     fetchData();
 
-    const socket = io('http://localhost:5001');
+    const socket = io(import.meta.env.VITE_API_URL + '');
     socket.on('reservation_update', fetchData);
     socket.on('table_update', fetchData);
 
@@ -43,8 +43,8 @@ const ReservationsManager = () => {
     setLoading(true);
     try {
       const [resRes, tableRes] = await Promise.all([
-        fetch('http://localhost:5001/api/reservations'),
-        fetch('http://localhost:5001/api/tables')
+        fetch(import.meta.env.VITE_API_URL + '/api/reservations'),
+        fetch(import.meta.env.VITE_API_URL + '/api/tables')
       ]);
       setReservations(await resRes.json());
       setTables(await tableRes.json());
@@ -57,7 +57,7 @@ const ReservationsManager = () => {
 
   const handleStatusUpdate = async (id, status) => {
     try {
-      await fetch(`http://localhost:5001/api/reservations/${id}/status`, {
+      await fetch(`${import.meta.env.VITE_API_URL}/api/reservations/${id}/status`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status })
@@ -79,7 +79,7 @@ const ReservationsManager = () => {
     // Second click: actually delete
     setConfirmDeleteId(null);
     try {
-      const res = await fetch(`http://localhost:5001/api/reservations/${id}`, { method: 'DELETE' });
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/reservations/${id}`, { method: 'DELETE' });
       if (res.ok) {
         // Immediately remove from local state for instant feedback
         setReservations(prev => prev.filter(r => r._id !== id));
@@ -95,7 +95,7 @@ const ReservationsManager = () => {
 
   const handleTableOverride = async (tableId, status) => {
     try {
-      await fetch(`http://localhost:5001/api/tables/${tableId}/status`, {
+      await fetch(`${import.meta.env.VITE_API_URL}/api/tables/${tableId}/status`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status })

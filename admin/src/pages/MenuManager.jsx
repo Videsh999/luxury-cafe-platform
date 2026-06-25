@@ -46,7 +46,7 @@ const MenuManager = () => {
 
   const fetchMenu = async () => {
     try {
-      const res = await fetch('http://localhost:5001/api/menu');
+      const res = await fetch(import.meta.env.VITE_API_URL + '/api/menu');
       const data = await res.json();
       setItems(data);
       setLoading(false);
@@ -64,7 +64,7 @@ const MenuManager = () => {
 
   const handleToggleAvailability = async (id, currentStatus) => {
     try {
-      const res = await fetch(`http://localhost:5001/api/menu/${id}/availability`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/menu/${id}/availability`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ isAvailable: !currentStatus })
@@ -81,7 +81,7 @@ const MenuManager = () => {
   const handleDelete = async () => {
     if (!editingItem) return;
     try {
-      const res = await fetch(`http://localhost:5001/api/menu/${editingItem._id}`, { method: 'DELETE' });
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/menu/${editingItem._id}`, { method: 'DELETE' });
       if (res.ok) {
         setItems(items.filter(item => item._id !== editingItem._id));
         showToast("Item deleted successfully");
@@ -96,7 +96,7 @@ const MenuManager = () => {
   const handleSave = async (e) => {
     e.preventDefault();
     try {
-      const url = editingItem ? `http://localhost:5001/api/menu/${editingItem._id}` : 'http://localhost:5001/api/menu';
+      const url = editingItem ? `${import.meta.env.VITE_API_URL}/api/menu/${editingItem._id}` : import.meta.env.VITE_API_URL + '/api/menu';
       const method = editingItem ? 'PUT' : 'POST';
       
       const res = await fetch(url, {

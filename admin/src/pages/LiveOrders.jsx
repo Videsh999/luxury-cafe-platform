@@ -29,7 +29,7 @@ const LiveOrders = () => {
   useEffect(() => {
     fetchOrders();
 
-    const socket = io('http://localhost:5001');
+    const socket = io(import.meta.env.VITE_API_URL + '');
     socket.on('new_order', (newOrder) => {
       setOrders(prev => [newOrder, ...prev]);
       playNotificationSound();
@@ -44,7 +44,7 @@ const LiveOrders = () => {
 
   const fetchOrders = async () => {
     try {
-      const res = await fetch('http://localhost:5001/api/orders');
+      const res = await fetch(import.meta.env.VITE_API_URL + '/api/orders');
       const data = await res.json();
       setOrders(data);
     } catch (err) {
@@ -61,7 +61,7 @@ const LiveOrders = () => {
 
   const updateOrderStatus = async (id, status) => {
     try {
-      const res = await fetch(`http://localhost:5001/api/orders/${id}/status`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/orders/${id}/status`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status })
@@ -74,7 +74,7 @@ const LiveOrders = () => {
 
   const updatePaymentStatus = async (id, paymentStatus) => {
     try {
-      const res = await fetch(`http://localhost:5001/api/orders/${id}/payment`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/orders/${id}/payment`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ paymentStatus })
