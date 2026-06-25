@@ -50,7 +50,7 @@ export default function Checkout() {
   useEffect(() => {
     if (orderType !== 'Dine In') { setSelectedTable(null); return; }
     setLoadingTables(true);
-    fetch('http://localhost:5001/api/tables')
+    fetch(import.meta.env.VITE_API_URL + '/api/tables')
       .then(r => r.json())
       .then(data => {
         console.log("Fetched tables:", data);
@@ -84,8 +84,8 @@ export default function Checkout() {
     try { playSFX('click'); } catch (_) {}
 
     const endpoint = paymentMethod === 'cod'
-      ? 'http://localhost:5001/api/orders/cod'
-      : 'http://localhost:5001/api/orders';
+      ? import.meta.env.VITE_API_URL + '/api/orders/cod'
+      : import.meta.env.VITE_API_URL + '/api/orders';
 
     const payload = {
       items:           cart.map(i => ({ menuItem: i._id, quantity: i.quantity, price: i.price, prepTime: i.prepTime })),

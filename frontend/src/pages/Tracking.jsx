@@ -19,7 +19,7 @@ const Tracking = () => {
 
   useEffect(() => {
     // Connect to Socket.io
-    const socket = io('http://localhost:5001');
+    const socket = io(import.meta.env.VITE_API_URL);
 
     socket.on('connect', () => {
       console.log('Connected to Tracking Socket');
@@ -34,7 +34,7 @@ const Tracking = () => {
 
     const fetchOrder = async () => {
       try {
-        const res = await fetch(`http://localhost:5001/api/orders/${orderId}`);
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/api/orders/${orderId}`);
         if (res.ok) {
           const data = await res.json();
           setOrder(data);

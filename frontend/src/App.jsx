@@ -75,7 +75,7 @@ const App = () => {
 
   useEffect(() => {
     // Connect socket for active users tracking
-    const socket = io('http://localhost:5001');
+    const socket = io(import.meta.env.VITE_API_URL);
 
     // Generate or get sessionId
     let sessionId = localStorage.getItem('aura_session_id');
@@ -87,7 +87,7 @@ const App = () => {
     // Track page view
     const trackPageView = async () => {
       try {
-        await fetch('http://localhost:5001/api/analytics/track', {
+        await fetch(import.meta.env.VITE_API_URL + '/api/analytics/track', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({

@@ -100,7 +100,7 @@ const Footer = () => (
           <a href="#" className="text-white/15 hover:text-white/50 text-[10px] tracking-[0.2em] uppercase font-sans transition-colors duration-500">Privacy</a>
           <a href="#" className="text-white/15 hover:text-white/50 text-[10px] tracking-[0.2em] uppercase font-sans transition-colors duration-500">Terms</a>
           <a
-            href="http://localhost:3001/"
+            href="https://luxury-cafe-platform.onrender.com"
             target="_blank"
             rel="noopener noreferrer"
             className="text-luxury-gold/40 hover:text-luxury-gold text-[10px] tracking-[0.2em] uppercase font-sans font-semibold transition-colors duration-500"

@@ -155,7 +155,7 @@ const AIChatbot = () => {
     try {
       const cleanHistory = messages.slice(-14).map(m => ({ role: m.role, content: m.content }));
 
-      const res = await fetch('http://localhost:5001/api/chat', {
+      const res = await fetch(import.meta.env.VITE_API_URL + '/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: text, history: cleanHistory, sessionId: SESSION_ID }),

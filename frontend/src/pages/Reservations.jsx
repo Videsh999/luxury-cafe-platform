@@ -117,7 +117,7 @@ const Reservations = () => {
   // ── Fetching Data ───────────────────────────────────────────────────────────
   useEffect(() => {
     fetchTables();
-    const socket = io('http://localhost:5001');
+    const socket = io(import.meta.env.VITE_API_URL);
     socket.on('reservation_update', () => {
       if (selectedDate && selectedTime) fetchBookedTables(selectedDate, selectedTime);
     });
@@ -127,7 +127,7 @@ const Reservations = () => {
 
   const fetchTables = async () => {
     try {
-      const res = await fetch('http://localhost:5001/api/tables');
+      const res = await fetch(import.meta.env.VITE_API_URL + '/api/tables');
       const data = await res.json();
       setTables(data);
     } catch (err) {
@@ -137,7 +137,7 @@ const Reservations = () => {
 
   const fetchBookedTables = async (date, time) => {
     try {
-      const res = await fetch(`http://localhost:5001/api/reservations/booked-tables?date=${date}&timeSlot=${time}&duration=${duration}`);
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/reservations/booked-tables?date=${date}&timeSlot=${time}&duration=${duration}`);
       const data = await res.json();
       setBookedTableIds(data || []);
     } catch (err) {
@@ -186,7 +186,7 @@ const Reservations = () => {
     setError('');
 
     try {
-      const res = await fetch('http://localhost:5001/api/reservations', {
+      const res = await fetch(import.meta.env.VITE_API_URL + '/api/reservations', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

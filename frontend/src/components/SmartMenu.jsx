@@ -406,7 +406,7 @@ const SmartMenu = () => {
     setLoading(true);
     setFetchError(false);
     try {
-      const res = await fetch('http://localhost:5001/api/menu');
+      const res = await fetch(import.meta.env.VITE_API_URL + '/api/menu');
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
       if (data.length === 0 && retryCount < 3) {
