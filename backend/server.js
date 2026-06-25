@@ -17,35 +17,37 @@ const JWT_SECRET   = process.env.JWT_SECRET  || 'aura_luxury_secret_123';
 // ── Express + HTTP + Socket.io setup ─────────────────────────────────────────
 const app = express();
 const httpServer = createServer(app);
+
+const allowedOrigins = [
+  "https://luxury-cafe-platform-1.onrender.com",
+  "http://localhost:5173",
+  "http://localhost:3000"
+];
+
 const io = new Server(httpServer, {
   cors: {
-    origin: [
-      'https://luxury-cafe-platform-1.onrender.com',
-      'http://localhost:5173',
-      'http://localhost:3000',
-      'http://localhost:3001',
-      'http://localhost:3002',
-      'http://127.0.0.1:3000',
-      'http://127.0.0.1:3001'
-    ],
-    methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE'],
-    credentials: true,
-  },
+    origin: allowedOrigins,
+    methods: ["GET","POST"],
+    credentials: true
+  }
 });
 app.set('io', io);
 
 app.use(cors({
-  origin: [
-    'https://luxury-cafe-platform-1.onrender.com',
-    'http://localhost:5173',
-    'http://localhost:3000',
-    'http://localhost:3001',
-    'http://localhost:3002',
-    'http://127.0.0.1:3000',
-    'http://127.0.0.1:3001'
-  ],
+  origin(origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   credentials: true,
+  methods: ["GET","POST","PUT","PATCH","DELETE","OPTIONS"],
+  allowedHeaders: ["Content-Type","Authorization"]
 }));
+
+app.options("*", cors());
+
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
